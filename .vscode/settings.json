@@ -47,6 +47,8 @@
 		"compare": "cpp",
 		"concepts": "cpp",
 		"ctime": "cpp",
-		"iterator": "cpp"
-	}
+		"iterator": "cpp",
+		"xtree": "cpp"
+	},
+	"C_Cpp.errorSquiggles": "Disabled"
 }
