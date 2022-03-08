@@ -1,23 +1,39 @@
-#include <cstdio>
-
+#include <iostream>
 using namespace std;
 
-int v[10001] = {};
-int cache[4] = {};
+int cache[1001] = {0};
+int s[1001] = {0};
+int v[1001] = {0};
 
-int MAX(int a, int b){if(a>b) return a; return b;}
+int MAXNUM(int a, int b){if(a>b) return a; return b;}
+bool MAX(int a, int b){if(a>=b) return true; return false;}
 
-int main() {
-	int N; scanf("%d", &N);
-	for (int i = 0; i < N; i++) scanf("%d", &v[i]);
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
-    cache[0] = v[0];
-    cache[1] = v[0] + v[1];
-    cache[2] = v[0] + v[1] + v[2];
-    cache[3] = MAX(v[1] + v[3], v[2] + v[3]);
+    int N, ret = 0, start = 0; cin >> N;
+    for(int i = 0; i < N; i++){
+        cin >> v[i];
+        cache[i] = 1; // 주의 할 점 2
+    }
+    cache[0] = 0; // 주의 할 점 1
 
-	for (int i = 0; i < N; i++)
-		cache[i%4] = MAX(v[i] + cache[(i-2)%4], v[i] + v[i-1] + cache[(i-3)%4]);
+    s[N-1] = N-1; cache[N-1] = 1;
 
-	printf("%d", cache[(N-1)%4]);
+    for (int i = N - 1; i >= 0 ; --i) {
+        for (int j = i + 1; j < N ; ++j) {
+            if(v[i] >= v[j]) continue;
+            if(MAX(cache[j], cache[i])){
+                s[i] = j;
+                cache[i] = cache[j] + 1;
+            }
+        }
+    }
+
+    for(int i = 0; i < N; i++)
+        ret = MAXNUM(cache[i], ret);
+
+    cout << ret;
 }
