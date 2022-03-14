@@ -1,28 +1,36 @@
 #include <cstdio>
 #include <vector>
+#include <utility>
+
 using namespace std;
+
 typedef pair<int, int> pii;
 
 int N, K;
-vector<pii> v;
+int volume[101] = {};
+int value[101] = {};
+int cache[100001][101] = {};
 
-int solve(int idx, int tw, int tv){
+int solve(int idx, int tw){
 	if(idx==N) return 0;
 	
-	int temp1=0, temp2=0, ret;
-	if(tw + v[idx].first <= K) temp1 = solve(idx+1, tw+v[idx].first, tv+v[idx].second);
-	temp2 = solve(idx+1, tw, tv);
+	int &ret = cache[tw][idx];
 
-	return ret = temp1 > temp2 ? temp1 : temp2;
+	if(ret != 0) return ret;
+
+	ret = solve(idx+1, tw);
+	if(tw + volume[idx] <= K){
+		ret = max(ret, solve(idx+1, tw+volume[idx]) + value[idx]);
+	}
+
+	return ret;
 }
 
 int main(){
 	scanf("%d %d", &N, &K);
 	
-	while(N--){
-		int W, V; scanf("%d %d", &W, &V);
-		v.push_back({W, V});
-	}
+	for(int i=0; i<N; i++)
+		scanf("%d %d", &volume[i], &value[i]);
 
-	printf("%d", solve(0, 0, 0));
+	printf("%d", solve(0, 0));
 }
